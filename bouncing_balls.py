@@ -24,13 +24,13 @@ TEXTURE_FILES = ["ball1.png",
                  "tennisball2.png"]
 
 
-SPACE_LIMITS = [[-200, 200],[-200, 800],[-200, 200]]
+TIME_TICK = 0.1
 GRAVITY_CONST = 7
-TIME_TICK = 0.07
 GRAVITY_VECTOR = np.array([0, -GRAVITY_CONST, 0])
-DAMPING_FACTOR = 0.18
 COLLISON_MARGIN = 0.1
-BALLS = 25
+SPACE_LIMITS = [[-200, 200],[-200, 800],[-200, 200]]
+DAMPING_FACTOR = 0.5
+BALLS = 50
 
 
 # Helper function to turn arrays into parameters the OpenGl bindings can swallow
@@ -105,29 +105,14 @@ class PhysicalBody(object):
 
     # resolve collsions with the walls
     def resolve_wall_collisions(self, space_limits):
-        if (self.pos[0] - self.size) < space_limits[0][0]:
-            self.speed[0] *= -(1 - DAMPING_FACTOR)
-            self.pos[0] = space_limits[0][0] + self.size + COLLISON_MARGIN;
+        for idx, limit in enumerate(space_limits):
+            if (self.pos[idx] - self.size) < limit[0]:
+                self.speed[idx] *= -(1 - DAMPING_FACTOR)
+                self.pos[idx] = limit[0] + self.size + COLLISON_MARGIN;
 
-        elif (self.pos[0] + self.size) > space_limits[0][1]:
-            self.speed[0] *= -(1 - DAMPING_FACTOR)
-            self.pos[0] = space_limits[0][1] -self.size - COLLISON_MARGIN;
-
-        if (self.pos[1] - self.size) < space_limits[1][0]:
-            self.speed[1] *= -(1 - DAMPING_FACTOR)
-            self.pos[1] = space_limits[1][0] + self.size + COLLISON_MARGIN;
-
-        elif(self.pos[1] + self.size) > space_limits[1][1]:
-            self.speed[1] *= -(1 - DAMPING_FACTOR)
-            self.pos[1] = space_limits[1][1] - self.size - COLLISON_MARGIN;
-
-        if (self.pos[2] - self.size) < space_limits[2][0]:
-            self.speed[2] *= -(1 - DAMPING_FACTOR)
-            self.pos[2] = space_limits[2][0] + self.size + COLLISON_MARGIN;
-
-        elif(self.pos[2] + self.size) > space_limits[2][1]:
-            self.speed[2] *= -(1 - DAMPING_FACTOR)
-            self.pos[2] = space_limits[2][1] - self.size - COLLISON_MARGIN;
+            elif (self.pos[idx] + self.size) > limit[1]:
+                self.speed[idx] *= -(1 - DAMPING_FACTOR)
+                self.pos[idx] = limit[1] - self.size - COLLISON_MARGIN;
 
 
     # Resolve collisions with other objects

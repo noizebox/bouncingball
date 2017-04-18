@@ -24,12 +24,12 @@ TEXTURE_FILES = ["ball1.png",
                  "tennisball2.png"]
 
 
-TIME_TICK = 0.1
+TIME_TICK = 0.06
 GRAVITY_CONST = 7
 GRAVITY_VECTOR = np.array([0, -GRAVITY_CONST, 0])
 COLLISON_MARGIN = 0.1
 SPACE_LIMITS = [[-200, 200],[-200, 800],[-200, 200]]
-DAMPING_FACTOR = 0.5
+DAMPING_FACTOR = 0.25
 BALLS = 50
 
 
@@ -124,11 +124,9 @@ class PhysicalBody(object):
                     direction = direction / np.linalg.norm(direction)
                     self_dv = np.dot(self.speed, direction)
                     obj_dv = np.dot(obj.speed, direction)
-                    acf = obj_dv
-                    bcf = self_dv;
 
-                    self.speed += (acf - self_dv) * direction * (1 - DAMPING_FACTOR) * (2 * obj.mass / (self.mass + obj.mass))
-                    obj.speed += (bcf - obj_dv) * direction  * (1 - DAMPING_FACTOR)  * (2 * self.mass / (self.mass + obj.mass))
+                    self.speed += (obj_dv - self_dv) * direction * (1 - DAMPING_FACTOR) * (2 * obj.mass / (self.mass + obj.mass))
+                    obj.speed += (self_dv - obj_dv) * direction  * (1 - DAMPING_FACTOR)  * (2 * self.mass / (self.mass + obj.mass))
 
                     self.pos += COLLISON_MARGIN * 3 * direction
                     self.handled_collisions.append(obj.index)
@@ -343,9 +341,7 @@ def main():
     cfg_file = WORLD_FILE;
     fullscreen = False
     if len(sys.argv) > 1:
-        cfg_file = sys.argv[1]
-    if len(sys.argv) > 2:
-        fullscreen = True if (sys.argv[2].strip() == "fullscreen") else False
+        fullscreen = True if (sys.argv[1].strip() == "-f") else False
 
     app = App(cfg_file, fullscreen)
     app.mainLoop()

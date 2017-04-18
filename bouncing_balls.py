@@ -210,7 +210,7 @@ class GraphObject(Body3D):
 class World(object):
     def __init__(self, objects, textures):
         self.ticks = 0
-        #self._setup_textures(textures) 
+        #self.__setup_textures(textures) 
         self.objects = []
         for obj in objects:
             self.objects.append(GraphObject(obj['mass'],
@@ -220,7 +220,7 @@ class World(object):
                                             self.textures[obj['texture']] if 'texture' in obj else None))
 
 
-    def _setup_textures(self, texture_names):
+    def __setup_textures(self, texture_names):
         self.textures = []
         for file_name in texture_names:
             img = pyglet.image.load(file_name)
@@ -257,7 +257,6 @@ class World(object):
         glMatrixMode(GL_MODELVIEW);
         glEnable(GL_LIGHTING)
 
-        # Draw all moving objects
         for obj in self.objects:
             obj.draw()
 
@@ -326,7 +325,7 @@ class App(object):
         glColor3f(1.0, 1.0, 1.0)
         glShadeModel (GL_SMOOTH)
 
-        glMaterialfv(GL_FRONT, GL_SPECULAR, vec(0.05, 0.05, 0.05, 1.0))
+        glMaterialfv(GL_FRONT, GL_SPECULAR, vec(0.0, 0.0, 0.0, 1.0))
         glMaterialfv(GL_FRONT, GL_SHININESS, vec(40.0))
         glLightfv(GL_LIGHT0, GL_DIFFUSE, vec(1.0, 1.0, 1.0, 1.0))
         glLightfv(GL_LIGHT0, GL_POSITION, vec(1.0, 1.0, 1.0, 0.0))

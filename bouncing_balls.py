@@ -24,14 +24,15 @@ TEXTURE_FILES = ["ball1.png",
                  "tennisball2.png"]
 
 
-TIME_TICK = 0.06
+TIME_TICK = 0.1
 GRAVITY_CONST = 7
 GRAVITY_VECTOR = np.array([0, -GRAVITY_CONST, 0])
 COLLISON_MARGIN = 0.1
 SPACE_LIMITS = [[-200, 200],[-200, 800],[-200, 200]]
 DAMPING_FACTOR = 0.25
 BALLS = 50
-
+MIN_BALL_SIZE = 20
+MAX_BALL_SIZE = 20
 
 # Helper function to turn arrays into parameters the OpenGl bindings can swallow
 def vec(*args):
@@ -43,10 +44,10 @@ def randomize_balls(count):
     data = []
     while len(data) < count:
         ball = {}
-        ball['size'] = uniform(20,20)
+        ball['size'] = uniform(MIN_BALL_SIZE, MAX_BALL_SIZE)
         ball['mass'] = math.pow(ball['size'], 3)
-        ball['pos'] = [uniform(-100,190), uniform(380,230), uniform(0,190)]
-        ball['init_vel'] = [uniform(-7,10),uniform(-20,20),uniform(-10,-25)]
+        ball['pos'] = [uniform(-100, 190), uniform(380, 230), uniform(0, 190)]
+        ball['init_vel'] = [uniform(-7, 10),uniform(-20, 20),uniform(-10, -25)]
         #ball['texture'] = 2
         # Make sure ball doesn't touch any existing ball
         touching = False
@@ -301,7 +302,6 @@ class App(object):
         self.world = World(world_data, TEXTURE_FILES)
         self.win = window.Window(fullscreen=fs, vsync=True)
         self.camera = Camera(self.win, zoom=150.0)
-        clock.set_fps_limit(60)
 
     def mainLoop(self):
         # Lighting setup

@@ -8,11 +8,11 @@ The project grew from previous physics simulation projects in Python and a desir
 
 ## Usage
 ```bash
-python bouncingball.py
+python3 bouncingball.py
 ```
 For fullscreen mode
 ```bash
-python bouncingball.py -f
+python3 bouncingball.py -f
 ```
 
 ## Dependecies
